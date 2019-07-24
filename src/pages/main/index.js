@@ -19,15 +19,16 @@ export default class Main extends Component{
 
         const _results = response.data.product;
 
-        //Essa função reduz o objeto tirando o valor passado por parametro
+        //Essa função aplica o filtro no objeto
         const filterObject = (obj, filter, filterValue) => 
         Object.keys(obj).reduce((acc, val) => 
-        (obj[val][filter] === filterValue ? acc : {
+        (obj[val][filter] !== filterValue ? acc : {
             ...acc,
             [val]: obj[val]
         }), {});
 
-        console.log(filterObject(_results, "category", "aluguel"));
+        const filtered = filterObject(_results, "category", "aluguel")
+        console.log(filtered);
 
     }
     render(){
