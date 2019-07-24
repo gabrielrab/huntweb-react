@@ -18,16 +18,30 @@ export default class Main extends Component{
         const response = await api.get(`/product`);
 
         const _results = response.data.product;
+        let filtered = {};
+
+        console.log('original', _results);
 
         //Essa função aplica o filtro no objeto
-        const filterObject = (obj, filter, filterValue) => 
-        Object.keys(obj).reduce((acc, val) => 
-        (obj[val][filter] !== filterValue ? acc : {
-            ...acc,
-            [val]: obj[val]
-        }), {});
+        function filterObject(obj, filter, filterValue, elementArray){
+             return Object.keys(obj).reduce((acc, val) => 
+            (obj[val][filter] !== filterValue ? acc : {
+                ...acc,
+                [val]: obj[val]
+            }), {});
+        }
 
-        const filtered = filterObject(_results, "category", "aluguel")
+        function filterObjectInsideArray(obj, filter, elementArray, filterValue){
+            return Object.keys(obj).reduce((acc, val)=>
+            (obj[val][filter][0][elementArray] !== filterValue ? acc : {
+                ...acc, 
+                [val]: obj[val]
+            }), {});
+        } 
+
+        filtered = filterObjectInsideArray(_results, "specs", 'bedrooms', 2);
+        filtered = filtered = filterObject(filtered, "category", "aluguel");
+        
         console.log(filtered);
 
     }
