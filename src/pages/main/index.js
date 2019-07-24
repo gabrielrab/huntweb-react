@@ -14,6 +14,22 @@ export default class Main extends Component{
         this.loadProducts();
     }
 
+    filterObject = (obj, filter, filterValue) =>{
+        return Object.keys(obj).reduce((acc, val) => 
+       (obj[val][filter] !== filterValue ? acc : {
+           ...acc,
+           [val]: obj[val]
+       }), {});
+   }
+
+   filterObjectInsideArray = (obj, filter, elementArray, filterValue) =>{
+       return Object.keys(obj).reduce((acc, val)=>
+       (obj[val][filter][0][elementArray] !== filterValue ? acc : {
+           ...acc, 
+           [val]: obj[val]
+       }), {});
+   }
+
     loadProducts = async()=>{
         const response = await api.get(`/product`);
 
@@ -22,31 +38,18 @@ export default class Main extends Component{
 
         console.log('original', _results);
 
-        //Essa função aplica o filtro no objeto
-        function filterObject(obj, filter, filterValue, elementArray){
-             return Object.keys(obj).reduce((acc, val) => 
-            (obj[val][filter] !== filterValue ? acc : {
-                ...acc,
-                [val]: obj[val]
-            }), {});
-        }
-
-        function filterObjectInsideArray(obj, filter, elementArray, filterValue){
-            return Object.keys(obj).reduce((acc, val)=>
-            (obj[val][filter][0][elementArray] !== filterValue ? acc : {
-                ...acc, 
-                [val]: obj[val]
-            }), {});
-        } 
-
-        filtered = filterObjectInsideArray(_results, "specs", 'bedrooms', 2);
-        filtered = filtered = filterObject(filtered, "category", "aluguel");
+        filtered = this.filterObjectInsideArray(_results, "specs", 'bedrooms', 2);
+        filtered = filtered = this.filterObject(filtered, "category", "aluguel");
         
-        console.log(filtered);
+        console.log('response', response.data.product);
+        console.log('filtered', filtered);
+        
+        this.setState({products: response.data.product});
 
+        console.log('state->', this.state);
     }
     render(){
-        const {products, page, productInfo} = this.state;
+        const {products} = this.state;
 
         return (
             <div className="product-list">
