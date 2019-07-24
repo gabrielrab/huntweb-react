@@ -14,36 +14,22 @@ export default class Main extends Component{
         this.loadProducts();
     }
 
-    loadProducts = async(page = 1)=>{
+    loadProducts = async()=>{
         const response = await api.get(`/product`);
 
-        console.log(response);
+        const _results = response.data.product;
 
-        //const {docs, ...productInfo} = response.data;
+        //Essa função reduz o objeto tirando o valor passado por parametro
+        const filterObject = (obj, filter, filterValue) => 
+        Object.keys(obj).reduce((acc, val) => 
+        (obj[val][filter] === filterValue ? acc : {
+            ...acc,
+            [val]: obj[val]
+        }), {});
 
-        //this.setState({products: docs, productInfo, page});
-        this.setState({products});
+        console.log(filterObject(_results, "category", "aluguel"));
+
     }
-
-    nextPage = () =>{
-        const {page, productInfo} = this.state;
-
-        if(page === productInfo.pages) return;
-
-        const pageNumber = page + 1;
-
-        this.loadProducts(pageNumber)
-    }
-    prevPage = () =>{
-        const { page } = this.state;
-
-        if(page === 1) return;
-
-        const pageNumber = page - 1;
-
-        this.loadProducts(pageNumber)
-    }
-
     render(){
         const {products, page, productInfo} = this.state;
 
@@ -58,8 +44,8 @@ export default class Main extends Component{
                     </article>
                 ))}
                 <div className="actions">
-                    <button disabled={page === 1} onClick={this.prevPage}>Anterior</button>
-                    <button disabled={page === productInfo.pages} onClick={this.nextPage}>Próximo</button>
+                    <button>Anterior</button>
+                    <button>Próximo</button>
                 </div>
             </div>
         )
