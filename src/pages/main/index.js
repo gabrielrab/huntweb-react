@@ -38,13 +38,26 @@ export default class Main extends Component{
 
         console.log('original', _results);
 
+
+        //Parei na parte de seter o filtered no state
+        // O state só aceita array de objeto
+        // No momento o filtered é so objeto
+        // Transformar o filtered em array de objetos e mandar para o state
+
         filtered = this.filterObjectInsideArray(_results, "specs", 'bedrooms', 2);
         filtered = filtered = this.filterObject(filtered, "category", "aluguel");
-        
+
+        const filteredArray = [];
+
+        for(let i = 0; i < Object.keys(filtered).length; i++){
+            filteredArray.push(filtered[i]);
+        }
+
+        console.log('filteredArray', filteredArray);
         console.log('response', response.data.product);
         console.log('filtered', filtered);
         
-        this.setState({products: response.data.product});
+        this.setState({products: filteredArray});
 
         console.log('state->', this.state);
     }
