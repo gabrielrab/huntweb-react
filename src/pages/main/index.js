@@ -36,14 +36,6 @@ export default class Main extends Component{
         const _results = response.data.product;
         let filtered = {};
 
-        console.log('original', _results);
-
-
-        //Parei na parte de seter o filtered no state
-        // O state só aceita array de objeto
-        // No momento o filtered é so objeto
-        // Transformar o filtered em array de objetos e mandar para o state
-
         filtered = this.filterObjectInsideArray(_results, "specs", 'bedrooms', 2);
         filtered = filtered = this.filterObject(filtered, "category", "aluguel");
 
@@ -53,30 +45,38 @@ export default class Main extends Component{
             filteredArray.push(filtered[i]);
         }
 
-        console.log('filteredArray', filteredArray);
-        console.log('response', response.data.product);
-        console.log('filtered', filtered);
-        
         this.setState({products: filteredArray});
-
-        console.log('state->', this.state);
     }
     render(){
         const {products} = this.state;
 
         return (
-            <div className="product-list">
-                {products.map(product => (
-                    <article key={product._id}>
-                        <strong>{product.title}</strong>
-                        <p>{product.description}</p>
-                        
-                        <Link to={`/products/${product._id}`}>Acessar</Link>
-                    </article>
-                ))}
-                <div className="actions">
-                    <button>Anterior</button>
-                    <button>Próximo</button>
+            <div>
+                <div className="filter">
+                    <form method="get">
+                        <label>
+                            <input type="checkbox" value="alugar" placeholder="Aqui"/>
+                            <select name="category">
+                                <option>Apartamento</option>
+                                <option>Casa</option>
+                            </select>
+                        </label>
+                        <button>Enviar</button>
+                    </form>
+                </div>
+                <div className="product-list">
+                    {products.map(product => (
+                        <article key={product._id}>
+                            <strong>{product.label}</strong>
+                            <p>{product.description}</p>
+                            
+                            <Link to={`/products/${product._id}`}>Acessar</Link>
+                        </article>
+                    ))}
+                    <div className="actions">
+                        <button>Anterior</button>
+                        <button>Próximo</button>
+                    </div>
                 </div>
             </div>
         )
