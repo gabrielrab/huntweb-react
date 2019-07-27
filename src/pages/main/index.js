@@ -47,13 +47,17 @@ export default class Main extends Component{
 
         this.setState({products: filteredArray});
     }
+
+    handleSubmit = (event) =>{
+        
+    }
     render(){
         const {products} = this.state;
 
         return (
             <div>
                 <div className="filter">
-                    <form method="get">
+                    <form onSubmit={this.handleSubmit}>
                         <label>
                             <input type="checkbox" value="alugar" placeholder="Aqui"/>
                             <select name="category">
