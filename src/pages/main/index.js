@@ -51,14 +51,15 @@ export default class Main extends Component{
     }
 
     handleFilter = (event) =>{
-
+        //handle filter function
+        
         const _state = this.state.products;
         console.log(_state);
         const { name, value } = event.target;
         let filtered = {};
 
         filtered = this.filterObject(_state, name, value);
-        
+
         const filteredArray = [];
         
         for(let i = 0; i < Object.keys(filtered).length; i++){
