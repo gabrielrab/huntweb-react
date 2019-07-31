@@ -52,13 +52,17 @@ export default class Main extends Component{
 
     handleFilter = (event) =>{
         //handle filter function
-        
+        //Tenho que pegar o name e value do campo do formulário e aplicar minha função de filtragem
         const _state = this.state.products;
-        console.log(_state);
+        
         const { name, value } = event.target;
+
+        console.log('name ->', name, 'value ->', value);
         let filtered = {};
 
-        filtered = this.filterObject(_state, name, value);
+        filtered = this.filterObject(_state, 'category', 'alugar');
+
+        console.log('filtered ->', filtered);
 
         const filteredArray = [];
         
