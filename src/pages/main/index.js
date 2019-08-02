@@ -15,6 +15,7 @@ export default class Main extends Component{
     }
 
     filterObject = (obj, filter, filterValue) =>{
+        console.log('Entrou na func')
         return Object.keys(obj).reduce((acc, val) => 
        (obj[val][filter] !== filterValue ? acc : {
            ...acc,
