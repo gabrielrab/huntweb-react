@@ -14,6 +14,7 @@ export default class Main extends Component{
         this.loadProducts();
     }
 
+    // Função para aplicar filtro "simples"
     filterObject = (obj, filter, filterValue) =>{
         return Object.keys(obj).reduce((acc, val) => 
        (obj[val][filter] !== filterValue ? acc : {
@@ -22,6 +23,7 @@ export default class Main extends Component{
        }), {});
    }
 
+   // Função para aplicar o filtro quando tem um elemento dentro de array
    filterObjectInsideArray = (obj, filter, elementArray, filterValue) =>{
        return Object.keys(obj).reduce((acc, val)=>
        (obj[val][filter][0][elementArray] !== filterValue ? acc : {
@@ -30,6 +32,7 @@ export default class Main extends Component{
        }), {});
    }
 
+   //Aqui carrego todos os products
     loadProducts = async()=>{
         const response = await api.get(`/product`);
 
@@ -38,25 +41,37 @@ export default class Main extends Component{
         console.log('state', this.state);
     }
 
+    //Função do onchange 
     handleFilter = (event) =>{
         const _state = this.state.products;
         
         const { name, value } = event.target;
 
-        console.log('name ->', name, 'value ->', value);
-
         let filtered = {};
 
         filtered = this.filterObject(_state, name, value);
 
+        
         const filteredArray = [];
         
-        for(let i = 0; i < Object.keys(filtered).length; i++){
-            filteredArray.push(filtered[i]);
-        }
+        //O if abaixo é uma gambiarra pois depois que eu aplicava o filtro e vinha mais de 1 resultado, a primeira posição do array obtia undefined
+        if(Object.keys(filtered).length > 1){
 
-        this.setState({products: filteredArray});
-        
+            //Essa parte aqui eu uso para deixar do formato do state
+            for(let i = 0; i < Object.keys(filtered).length + 1; i++){
+                filteredArray.push(filtered[i]);
+            }
+
+            filteredArray.shift();
+
+            return this.setState({products: filteredArray});
+        } else{
+            for(let i = 0; i < Object.keys(filtered).length; i++){
+                filteredArray.push(filtered[i]);
+            }
+
+            return this.setState({products: filteredArray});
+        }
     }
     render(){
         const {products} = this.state;
@@ -66,14 +81,17 @@ export default class Main extends Component{
                 <div className="filter">
                     <form>
                         <label>
-                            Alugar: <input type="checkbox" name="category" value="alugar" onChange={this.handleFilter}/>
-                            Comprar: <input type="checkbox" name="category" value="vender" />
+                            Alugar: <input type="checkbox" name="category" value="alugar" onChange={this.handleFilter} />
+                            Comprar: <input type="checkbox" name="category" value="vender" onChange={this.handleFilter}/>
                         </label>
-                        <select name="category" onChange={this.handleFilter}>
-                            <option value="apartamento">Apartamento</option>
-                            <option value="casa">Casa</option>
+                        <select name="label" onChange={this.handleFilter}>
+                            <option hidden>Selecione</option>
+                            <option value="Apartamento ">Apartamento</option>
+                            <option value="Lote">Lote</option>
+                            <option value="Casa">Casa</option>
                         </select>
                         <button>Enviar</button>
+                        <button onChange={this.loadProducts}>Limpar</button>
                     </form>
                 </div>
                 <div className="product-list">
@@ -86,10 +104,6 @@ export default class Main extends Component{
                             <Link to={`/products/${product._id}`}>Acessar</Link>
                         </article>
                     ))}
-                    <div className="actions">
-                        <button>Anterior</button>
-                        <button>Próximo</button>
-                    </div>
                 </div>
             </div>
         )
