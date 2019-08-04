@@ -3,7 +3,7 @@ import React from 'react';
 import './styles.css';
 
 const Header = ()=> (
-    <header id="main-header">React Hunter</header>
+    <header id="main-header">Nexo Imobiliaria</header>
 );
 
 export default Header;

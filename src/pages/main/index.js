@@ -15,7 +15,6 @@ export default class Main extends Component{
     }
 
     filterObject = (obj, filter, filterValue) =>{
-        console.log('Entrou na func')
         return Object.keys(obj).reduce((acc, val) => 
        (obj[val][filter] !== filterValue ? acc : {
            ...acc,
@@ -34,36 +33,21 @@ export default class Main extends Component{
     loadProducts = async()=>{
         const response = await api.get(`/product`);
 
-        //const _results = response.data.product;
-        //let filtered = {};
-
-        //filtered = this.filterObjectInsideArray(_results, "specs", 'bedrooms', 2);
-        //filtered = filtered = this.filterObject(filtered, "category", "aluguel");
-
-        //const filteredArray = [];
-
-        // for(let i = 0; i < Object.keys(filtered).length; i++){
-        //     filteredArray.push(filtered[i]);
-        // }
-
         this.setState({products: response.data.product});
 
         console.log('state', this.state);
     }
 
     handleFilter = (event) =>{
-        //handle filter function
-        //Tenho que pegar o name e value do campo do formulário e aplicar minha função de filtragem
         const _state = this.state.products;
         
         const { name, value } = event.target;
 
         console.log('name ->', name, 'value ->', value);
+
         let filtered = {};
 
-        filtered = this.filterObject(_state, 'category', 'alugar');
-
-        console.log('filtered ->', filtered);
+        filtered = this.filterObject(_state, name, value);
 
         const filteredArray = [];
         
@@ -83,11 +67,11 @@ export default class Main extends Component{
                     <form>
                         <label>
                             Alugar: <input type="checkbox" name="category" value="alugar" onChange={this.handleFilter}/>
-                            Comprar: <input type="checkbox" name="category" value="comprar" />
+                            Comprar: <input type="checkbox" name="category" value="vender" />
                         </label>
-                        <select name="category">
-                            <option>Apartamento</option>
-                            <option>Casa</option>
+                        <select name="category" onChange={this.handleFilter}>
+                            <option value="apartamento">Apartamento</option>
+                            <option value="casa">Casa</option>
                         </select>
                         <button>Enviar</button>
                     </form>
@@ -95,7 +79,8 @@ export default class Main extends Component{
                 <div className="product-list">
                     {products.map(product => (
                         <article key={product._id}>
-                            <strong>{product.label}</strong>
+                            <strong>{product.label}</strong><br/>
+                            <i>{product.category}</i>
                             <p>{product.description}</p>
                             
                             <Link to={`/products/${product._id}`}>Acessar</Link>
