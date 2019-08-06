@@ -32,6 +32,13 @@ export default class Main extends Component{
        }), {});
    }
 
+
+   //Criar uma copia do state e manipular ela
+   //Usar uma função para cada opção
+   //"Voltar filtro"
+   //De alguma forma colocar os filtros que devem ser aplicados salvos depois poder retira-los
+
+
    //Aqui carrego todos os products
     loadProducts = async()=>{
         const response = await api.get(`/product`);
