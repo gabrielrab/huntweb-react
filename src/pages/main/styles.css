@@ -65,3 +65,13 @@
     opacity: 0.5;
     cursor: default;
 }
+
+.product-empty{
+    max-width: 700px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}

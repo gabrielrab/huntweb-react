@@ -101,17 +101,24 @@ export default class Main extends Component{
                         <button onChange={this.loadProducts}>Limpar</button>
                     </form>
                 </div>
-                <div className="product-list">
-                    {products.map(product => (
-                        <article key={product._id}>
-                            <strong>{product.label}</strong><br/>
-                            <i>{product.category}</i>
-                            <p>{product.description}</p>
-                            
-                            <Link to={`/products/${product._id}`}>Acessar</Link>
-                        </article>
-                    ))}
-                </div>
+                {products.length > 0 ? (
+                    <div className="product-list">
+                        {products.map(product => (
+                            <article key={product._id}>
+                                <strong>{product.label}</strong><br/>
+                                <i>{product.category}</i>
+                                <p>{product.description}</p>
+                                
+                                <Link to={`/products/${product._id}`}>Acessar</Link>
+                            </article>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="product-empty">
+                        <h1>:(</h1><br/>
+                        <p>Utilize o botão "Limpar" para redefinir sua busca.</p>
+                    </div>
+                )}
             </div>
         )
     }
